@@ -260,6 +260,7 @@ STOPPING=5, ENDED=6, ERROR=7
         5: 'Stopped',
         6: 'Ended',
         7: 'Error',
+        8: 'Closed',
     }
 
     def __repr__(self):

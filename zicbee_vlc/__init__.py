@@ -4,6 +4,7 @@ __all__ = ['Player']
 from .vlc import Instance
 
 class Player(object):
+    _finished = False
     def __init__(self):
         self.vlc = Instance()
         self.p = None
@@ -36,7 +37,14 @@ class Player(object):
         if self.p:
             self.p.stop()
         self.p = self.vlc.media_player_new(uri)
+        Player._finished = False
+        e = self.p.event_manager()
+        e.event_attach(vlc.EventType.MediaPlayerEndReached, self.__end_reached, None)
         self.p.play()
+
+    @vlc.callbackmethod
+    def __end_reached(event, plr):
+        Player._finished = True
 
     def quit(self):
         """ De-initialize player and wait for it to shut down """
@@ -50,6 +58,8 @@ class Player(object):
     def position(self):
         """ returns the stream position, in seconds """
         if self.p:
-            return self.p.get_position()*100
+            if self._finished:
+                return None
+            return self.p.get_position()*10
 
 
