@@ -28,7 +28,7 @@ setup (
 
         entry_points = """
         [zicbee.player]
-        vlc = zicbee_vlc:Player
+        vlc = zicbee_vlc.core:Player
         """,
 
         dependency_links = [
