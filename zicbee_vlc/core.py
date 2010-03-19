@@ -1,11 +1,11 @@
 __all__ = ['Player']
 
-from .vlc import Instance
+from . import vlc
 
 class Player(object):
     _finished = False
     def __init__(self):
-        self.vlc = Instance()
+        self.vlc = vlc.Instance()
         self.p = None
 
     def set_cache(self, val):
