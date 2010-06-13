@@ -39,7 +39,13 @@ class Player(object):
         Player._finished = False
         e = self.p.event_manager()
         e.event_attach(vlc.EventType.MediaPlayerEndReached, self.__end_reached, None)
-        self.p.play()
+        try:
+            if self.p.will_play() != 1:
+                raise ValueError("Won't play")
+        except Exception: # ValueError or any VLC Error
+            self._finished = True
+        else:
+            self.p.play()
 
     @vlc.callbackmethod
     def __end_reached(event, plr):
