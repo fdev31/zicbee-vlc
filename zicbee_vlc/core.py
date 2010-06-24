@@ -1,6 +1,7 @@
 __all__ = ['Player']
 
 from . import vlc
+import os
 
 class Player(object):
     _finished = False
@@ -39,10 +40,7 @@ class Player(object):
         Player._finished = False
         e = self.p.event_manager()
         e.event_attach(vlc.EventType.MediaPlayerEndReached, self.__end_reached, None)
-        try:
-            if not ('://' in uri and not uri.startswith('file')) and self.p.will_play() != 1:
-                raise ValueError("Won't play")
-        except: # ValueError or any VLC Error
+        if (not '://' in uri or uri.startswith('file://')) and os.stat(uri).st_size < 100:
             self._finished = True
         else:
             self.p.play()
